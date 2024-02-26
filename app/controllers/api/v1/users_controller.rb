@@ -4,10 +4,12 @@ class UsersController < ApplicationController
   # GET /users or /users.json
   def index
     @users = User.all
+    render json = @user
   end
 
   # GET /users/1 or /users/1.json
   def show
+    @users = User.find(params[:id])
   end
 
   # GET /users/new

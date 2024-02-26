@@ -4,10 +4,12 @@ class Api::V1::MenuItemsController < ApplicationController
   # GET /menu_items or /menu_items.json
   def index
     @menu_items = MenuItem.all
+    render json: @menu_items
   end
 
   # GET /menu_items/1 or /menu_items/1.json
   def show
+    @menu_item = MenuItem.find(params[:id])
   end
 
   # GET /menu_items/new
