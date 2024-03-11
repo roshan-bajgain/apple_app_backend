@@ -1,3 +1,3 @@
 class User < ApplicationRecord
-    has_many :menu_items
+    # has_many :menu_items
 end

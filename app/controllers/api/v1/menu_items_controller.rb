@@ -4,12 +4,13 @@ class Api::V1::MenuItemsController < ApplicationController
   # GET /menu_items or /menu_items.json
   def index
     @menu_items = MenuItem.all
-    render json: @menu_items
+    render json: @menu_items.as_json(methods: :image)
   end
 
   # GET /menu_items/1 or /menu_items/1.json
   def show
     @menu_item = MenuItem.find(params[:id])
+    render json: @menu_item.as_json(methods: :image)
   end
 
   # GET /menu_items/new
@@ -23,14 +24,19 @@ class Api::V1::MenuItemsController < ApplicationController
 
   # POST /menu_items or /menu_items.json
   def create
-    @menu_item = MenuItem.new(menu_item_params)
+    @menu_item = MenuItem.new(
+      name: params[:name],
+      image: params[:image],
+      price: params[:price],
+      description: params[:description],
+    )
 
     respond_to do |format|
       if @menu_item.save
-        format.html { redirect_to menu_item_url(@menu_item), notice: "Menu item was successfully created." }
-        format.json { render :show, status: :created, location: @menu_item }
+        # format.html { redirect_to menu_item_url(@menu_item), notice: "Menu item was successfully created." }
+        format.json { render json: @menu_item, status: :created }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        # format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @menu_item.errors, status: :unprocessable_entity }
       end
     end
@@ -40,10 +46,10 @@ class Api::V1::MenuItemsController < ApplicationController
   def update
     respond_to do |format|
       if @menu_item.update(menu_item_params)
-        format.html { redirect_to menu_item_url(@menu_item), notice: "Menu item was successfully updated." }
+        # format.html { redirect_to menu_item_url(@menu_item), notice: "Menu item was successfully updated." }
         format.json { render :show, status: :ok, location: @menu_item }
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        # format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @menu_item.errors, status: :unprocessable_entity }
       end
     end
@@ -54,7 +60,7 @@ class Api::V1::MenuItemsController < ApplicationController
     @menu_item.destroy!
 
     respond_to do |format|
-      format.html { redirect_to menu_items_url, notice: "Menu item was successfully destroyed." }
+      # format.html { redirect_to menu_items_url, notice: "Menu item was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -67,6 +73,6 @@ class Api::V1::MenuItemsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def menu_item_params
-      params.require(:menu_item).permit(:image, :name, :price, :description)
+      params.require(:menu_item).permit(:name, :price, :description, :image)
     end
 end
